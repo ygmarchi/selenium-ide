@@ -250,6 +250,7 @@ export default class ProjectStore {
       suites: this._suites.map(s => s.export()),
       urls: this._urls.slice (),
       plugins: this.plugins.slice (),
+	  modified: this.modified,
     })
   }
 }
