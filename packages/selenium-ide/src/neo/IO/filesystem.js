@@ -204,7 +204,7 @@ export function loadProject(project, file) {
             UiState.selectTest(
               project.addTestCase(TestCase.fromJS(test, baseUrl))
             )
-          }
+          }	
         }
       } catch (error) {
         displayError(error)
@@ -228,3 +228,22 @@ export function loadJSProject(project, data) {
     },
   })
 }
+
+export function addJSTest (project, data) {
+	var testData = data.test;
+	var test = TestCase.fromJS (data.test);
+	project.addTestCase (test);
+	if (data.suiteId !== undefined) {
+		var suite = project.suites.find(suite => suite.id === data.suiteId);
+		if (data.index !== undefined)
+			suite.insertTestCaseAt (test, data.index);
+		 else 
+			suite.addTestCase (test);
+	}
+}
+
+export function deleteJSTest (project, testId) {
+    var test = project.tests.find(test => test.id === testId);
+	project.deleteTestCase (test);
+}
+

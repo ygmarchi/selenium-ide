@@ -7,7 +7,7 @@
   "homepage_url": "https://github.com/SeleniumHQ/selenium-ide",
    "browser_specific_settings": {
 	  "gecko": {
-		"id": "selenium-ide@github.com"	
+		"id": "SeleniumIDE@3.16.1"	
 	  }
 	},  
    "icons": {

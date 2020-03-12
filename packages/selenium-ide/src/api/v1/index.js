@@ -27,7 +27,7 @@ import popupRouter from './popup'
 import UiState from '../../neo/stores/view/UiState'
 import WindowSession from '../../neo/IO/window-session'
 import ModalState from '../../neo/stores/view/ModalState'
-import { loadJSProject,  } from '../../neo/IO/filesystem'
+import { loadJSProject, addJSTest, deleteJSTest  } from '../../neo/IO/filesystem'
 import { migrateTestCase, } from '../../neo/IO/legacy/migrate'
 import manager from '../../plugin/manager'
 
@@ -224,6 +224,18 @@ router.post('/project', (req, res) => {
 router.get('/migrate', (req, res) => {
   controlledOnly(req, res).then(() => {
 	res (migrateTestCase(req.contents))
+  })
+})
+
+router.put('/test', (req, res) => {
+  controlledOnly(req, res).then(() => {
+	res (addJSTest(UiState.project, req))
+  })
+})
+
+router.delete('/test', (req, res) => {
+  controlledOnly(req, res).then(() => {
+	res (deleteJSTest(UiState.project, req.id))
   })
 })
 
