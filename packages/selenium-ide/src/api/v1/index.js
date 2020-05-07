@@ -27,7 +27,7 @@ import popupRouter from './popup'
 import UiState from '../../neo/stores/view/UiState'
 import WindowSession from '../../neo/IO/window-session'
 import ModalState from '../../neo/stores/view/ModalState'
-import { loadJSProject, addJSTest, deleteJSTest  } from '../../neo/IO/filesystem'
+import { loadJSProject, addJSTest, deleteJSTest, updateJSTest } from '../../neo/IO/filesystem'
 import { migrateTestCase, } from '../../neo/IO/legacy/migrate'
 import manager from '../../plugin/manager'
 
@@ -237,6 +237,28 @@ router.delete('/test', (req, res) => {
   controlledOnly(req, res).then(() => {
 	res (deleteJSTest(UiState.project, req.id))
   })
+})
+
+router.put('/suite', (req, res) => {
+  controlledOnly(req, res).then(() => {
+	res (addJSSuite(UiState.project, req))
+  })
+})
+
+router.delete('/suite', (req, res) => {
+  controlledOnly(req, res).then(() => {
+		res (deleteJSSuite(UiState.project, req.id))
+  })
+})
+
+router.post('/test', (req, res) => {
+	controlledOnly(req, res).then(() => {
+		try {
+			res (updateJSTest(UiState.project, req))
+		} catch(e) {
+			res ({ error: e.message })
+		}
+	})
 })
 
 router.use('/playback', playbackRouter)

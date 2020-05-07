@@ -168,6 +168,43 @@ export default class ProjectStore {
   }
 
   @action.bound
+  addSuite(suite) {
+    if (!suite || !(suite instanceof Suite)) {
+      throw new Error(
+        `Expected to receive Suite instead received ${
+          suite ? suite.constructor.name : suite
+        }`
+      )
+    } else {
+      this._suites.push(suite)
+      return suite
+    }
+  }
+
+  @action.bound
+  updateTest (test) {
+    if (!test || !(test instanceof TestCase)) {
+      throw new Error(
+        `Expected to receive TestCase instead received ${
+          test ? test.constructor.name : test
+        }`
+      )
+    } else {
+			var own = this._tests.find (own => own.id === test.id)
+			if (own) {
+					if (test.name) 
+						own.name = test.name
+					if (test.commands)
+						own.commands.replace (test.commands)
+			} else {
+				throw new Error(
+					`Test with id ${test.id} not found`
+				)
+			}
+    }
+  }
+
+  @action.bound
   duplicateTestCase(test) {
     const test2 = test.export()
     delete test2.id

@@ -25,6 +25,7 @@ import {
   migrateProject,
   migrateUrls,
 } from './legacy/migrate'
+import Suite from '../models/Suite'
 import TestCase from '../models/TestCase'
 import UiState from '../stores/view/UiState'
 import PlaybackState from '../stores/view/PlaybackState'
@@ -231,7 +232,7 @@ export function loadJSProject(project, data) {
 
 export function addJSTest (project, data) {
 	var testData = data.test;
-	var test = TestCase.fromJS (data.test);
+	var test = TestCase.fromJS (testData);
 	project.addTestCase (test);
 	if (data.suiteId !== undefined) {
 		var suite = project.suites.find(suite => suite.id === data.suiteId);
@@ -242,8 +243,43 @@ export function addJSTest (project, data) {
 	}
 }
 
+export function updateJSTest (project, data) {
+	var testData = data.test;
+	
+	var hasCommands = testData.commands;
+	if (!hasCommands)
+		testData.commands = [];
+	var test = TestCase.fromJS (testData);
+	if (!hasCommands)
+		delete testData.commands;	
+	
+	project.updateTest (test);
+	
+	if (data.suiteId !== undefined && data.index !== undefined) {
+		var suite = project.suites.find(suite => suite.id === data.suiteId);
+		if (data.index !== undefined) {
+			var index = suite.tests.indexOf (test);
+			if (index !== data.index)
+				suite.swapTestCases (index, data.index);
+		}
+	}
+	
+	UiState.selectTest (test)
+}
+
+
 export function deleteJSTest (project, testId) {
     var test = project.tests.find(test => test.id === testId);
 	project.deleteTestCase (test);
 }
 
+export function addJSSuite (project, data) {
+	var suiteData = data.suite;
+	var suite = Suite.fromJS (suiteData, project.tests);
+	project.addSuite (suite);
+}
+
+export function deleteJSSuite (project, suiteId) {
+    var suite = project.suites.find(suite => suite.id === suiteId);
+	project.deleteSuite (suite);
+}
