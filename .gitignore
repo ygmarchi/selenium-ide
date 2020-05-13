@@ -24,3 +24,11 @@ docs/api/commands.md
 
 # master remnants from switching locally
 *.tsbuildinfo
+
+.bash_history
+.bashrc
+.cache/
+.local/
+.profile
+.python_history
+.yarnrc
